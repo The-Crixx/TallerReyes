@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotizacion</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+	<aside class="panel">
+		<a class="menu-link" href="../index.html">Volver al menu</a>
+		<h1>Formulario de cotizacion</h1>
+		<p class="subtitle">Captura los datos del cliente, agrega conceptos y deja que el total se calcule automaticamente.</p>
+
+		<div class="form-grid">
+			<div class="field full">
+				<label for="cotizacion">Folio / cotizacion (autogenerado)</label>
+				<input id="cotizacion" type="text" placeholder="Se genera automaticamente" readonly>
+			</div>
+
+			<div class="field full">
+				<label for="cliente">Nombre del cliente</label>
+				<input id="cliente" type="text" placeholder="Nombre o razon social">
+			</div>
+
+			<div class="field full">
+				<label for="direccion">Direccion</label>
+				<textarea id="direccion" placeholder="Calle, numero, colonia, municipio, estado"></textarea>
+			</div>
+
+			<div class="field">
+				<label for="telefono">Telefono</label>
+				<input id="telefono" type="text" placeholder="Telefono de contacto">
+			</div>
+
+			<div class="field">
+				<label for="email">Correo</label>
+				<input id="email" type="email" placeholder="correo@ejemplo.com">
+			</div>
+
+			<div class="field">
+				<label for="unidad">Unidad / vehiculo</label>
+				<input id="unidad" type="text" placeholder="Marca, modelo o equipo">
+			</div>
+
+			<div class="field">
+				<label for="placa">Placas</label>
+				<input id="placa" type="text" placeholder="Placa del vehiculo">
+			</div>
+
+			<div class="field">
+				<label for="vin">VIN</label>
+				<input id="vin" type="text" placeholder="Numero de serie vehicular (VIN)">
+			</div>
+
+			<div class="field">
+				<label for="kilometraje">Kilometraje</label>
+				<input id="kilometraje" type="text" placeholder="Ej. 125000 km">
+			</div>
+
+			<div class="field">
+				<label for="modelo">Modelo</label>
+				<input id="modelo" type="text" placeholder="Modelo del vehiculo">
+			</div>
+
+			<div class="field">
+				<label for="anio">Año</label>
+				<input id="anio" type="text" placeholder="Año del vehiculo (YYYY)">
+			</div>
+
+			<div class="field">
+				<label for="fecha">Fecha</label>
+				<input id="fecha" type="date">
+			</div>
+
+			<div class="field">
+				<label for="vigencia">Vigencia</label>
+				<input id="vigencia" type="text" value="30 dias">
+			</div>
+
+			<div class="field full">
+				<label for="condiciones">Condiciones de pago</label>
+				<select id="condiciones">
+					<option value="" selected disabled>Selecciona una opcion</option>
+					<option value="Contado">Contado</option>
+					<option value="Transferencia">Transferencia</option>
+					<option value="Credito">Credito</option>
+				</select>
+			</div>
+
+			<div class="field full">
+				<label for="notas">Notas adicionales</label>
+				<textarea id="notas" placeholder="Observaciones, tiempos de entrega, garantia, etc."></textarea>
+			</div>
+		</div>
+
+		<div class="section-title">Conceptos</div>
+		<table>
+			<thead>
+				<tr>
+					<th class="center" style="width: 62px;">Cantidad</th>
+					<th class="center" style="width: 80px;">Unidad</th>
+					<th>Descripcion</th>
+					<th class="center" style="width: 120px;">Precio Unitario</th>
+					<th class="center" style="width: 120px;">Importe</th>
+					<th class="center" style="width: 78px;">Accion</th>
+				</tr>
+			</thead>
+			<tbody id="conceptosBody"></tbody>
+		</table>
+
+		<div class="actions">
+			<button class="btn-soft" type="button" id="btnAgregar">Agregar concepto</button>
+			<button class="btn-primary" type="button" id="btnGenerarPDF">Generar PDF</button>
+			<button class="btn-soft" type="button" id="btnGuardarEditable">Guardar editable</button>
+			<button class="btn-soft" type="button" id="btnEditar">Cargar editable</button>
+			<button class="btn-danger" type="button" id="btnLimpiar">Limpiar</button>
+		</div>
+		<input type="file" id="inputJson" accept="application/json" style="display:none">
+
+		<p class="note">El logo se carga desde <strong>logo.png</strong> en esta misma carpeta. La cotizacion de la derecha se actualiza en vivo.</p>
+	</aside>
+
+	<main class="sheet">
+		<section class="quote" id="quotePreview">
+			<div class="quote-topline">
+				<div id="fechaHoraPreview" class="muted" style="font-size:0.82rem"></div>
+				<div>Cotizacion</div>
+				<div class="title" id="folioPreview">COT-2026-001</div>
+			</div>
+
+			<div class="quote-header">
+				<div class="brand">
+					<img src="logo.png" alt="Logo Taller Reyes">
+				</div>
+			</div>
+
+			<div class="info-grid">
+				<div class="box">
+					<h3>A quien corresponda</h3>
+					<div class="block">
+						<div class="inline-field"><strong>Nombre:</strong> <span id="vistaCliente">-</span></div>
+						<div class="inline-field"><strong>Direccion:</strong> <span id="vistaDireccion">-</span></div>
+						<div class="inline-field"><strong>Telefono:</strong> <span id="vistaTelefono">-</span></div>
+						<div class="inline-field"><strong>Correo:</strong> <span id="vistaEmail">-</span></div>
+					</div>
+				</div>
+				<div class="box">
+					<h3>Adicional</h3>
+					<div class="block">
+						<div class="inline-field"><strong>Folio:</strong> <span id="vistaFolio">-</span></div>
+						<div class="inline-field"><strong>Fecha:</strong> <span id="vistaFecha">-</span></div>
+						<div class="inline-field"><strong>Condiciones:</strong> <span id="vistaCondiciones">-</span></div>
+						<div class="inline-field"><strong>Vigencia:</strong> <span id="vistaVigencia">-</span></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="section-title">Conceptos</div>
+
+			<div class="summary-box">
+				<div class="summary-line"><span class="summary-label">UNIDAD:</span><span class="summary-value" id="vistaUnidad">-</span></div>
+				<div class="summary-line"><span class="summary-label">PLACAS:</span><span class="summary-value" id="vistaPlaca">-</span></div>
+				<div class="summary-line"><span class="summary-label">VIN:</span><span class="summary-value" id="vistaVin">-</span></div>
+				<div class="summary-line"><span class="summary-label">KILOMETRAJE:</span><span class="summary-value" id="vistaKilometraje">-</span></div>
+				<div class="summary-line"><span class="summary-label">MODELO:</span><span class="summary-value" id="vistaModelo">-</span></div>
+				<div class="summary-line"><span class="summary-label">AÑO:</span><span class="summary-value" id="vistaAnio">-</span></div>
+			</div>
+
+			<table>
+				<thead>
+					<tr>
+						<th class="center" style="width: 62px;">Cantidad</th>
+						<th class="center" style="width: 80px;">Unidad</th>
+						<th>Descripcion</th>
+						<th class="center" style="width: 120px;">Precio Unitario</th>
+						<th class="center" style="width: 120px;">Importe</th>
+					</tr>
+				</thead>
+				<tbody id="previewConceptosBody"></tbody>
+			</table>
+
+			<div class="totals-wrap">
+				<div>
+					<div class="box box-notes">
+						<div class="box-title">Observaciones</div>
+						<p id="vistaNotas">Sin observaciones registradas.</p>
+					</div>
+				</div>
+
+				<div class="totals">
+					<div class="totals-title">Totales</div>
+					<div class="line"><span>Subtotal:</span><span id="subtotalTexto">$0.00</span></div>
+					<div class="line"><span>002-IVA:</span><span id="ivaTexto">$0.00</span></div>
+					<div class="line total"><span>Total:</span><span id="totalTexto">$0.00</span></div>
+				</div>
+			</div>
+
+			<div class="amount-words">
+				<div class="label">Cantidad con letra</div>
+				<div class="value" id="cantidadLetras">CERO PESOS 00/100 M.N.</div>
+			</div>
+
+			<div class="footer-note">
+				Cotizacion generada para revision y autorizacion. Los precios pueden cambiar sin previo aviso si se modifica el alcance del trabajo.
+			</div>
+		</section>
+	</main>
+</div>
+
+<!-- jsPDF bundle for direct PDF drawing -->
+<script src="vendor/jspdf.umd.min.js"></script>
+<script>
+if (typeof window.jspdf === 'undefined') {
+	(function(){
+		var s = document.createElement('script');
+		s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+		s.async = true;
+		s.onload = function(){ console.info('jsPDF loaded from CDN fallback'); };
+		document.head.appendChild(s);
+	})();
+}
+</script>
+<script src="script.js"></script>
+</body>
+</html>
