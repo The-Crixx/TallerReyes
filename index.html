@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal de Reportes</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg-1: #f7f1e7;
+    --bg-2: #e6edf5;
+    --ink: #1a2433;
+    --muted: #5a6b7e;
+    --card: #ffffff;
+    --accent: #0d3b66;
+    --accent-2: #2a9d8f;
+    --line: #d4dde8;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: "Montserrat", "Trebuchet MS", sans-serif;
+    color: var(--ink);
+    background:
+        radial-gradient(circle at 15% 20%, #fef7e7 0%, transparent 45%),
+        radial-gradient(circle at 80% 10%, #e8f0fb 0%, transparent 40%),
+        linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+.container {
+    width: min(960px, 100%);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgba(26, 36, 51, 0.12);
+    padding: 28px;
+}
+.header {
+    display: grid;
+    gap: 8px;
+    border-bottom: 2px solid var(--line);
+    padding-bottom: 16px;
+}
+.header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    letter-spacing: 0.4px;
+}
+.header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.98rem;
+}
+.menu {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+.card {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    background: #fbfdff;
+    display: grid;
+    gap: 10px;
+    min-height: 150px;
+}
+.card h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--accent);
+}
+.card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+.card a {
+    align-self: end;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: var(--accent);
+    color: #ffffff;
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.card a.secondary {
+    background: var(--accent-2);
+}
+.card a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(13, 59, 102, 0.18);
+}
+.footer {
+    margin-top: 18px;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+@media (max-width: 640px) {
+    .container { padding: 20px; }
+    .header h1 { font-size: 1.5rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Servicios Reyes</h1>
+        <p>Selecciona lo que quieres crear o editar. Se iran agregando nuevas opciones aqui.</p>
+    </div>
+    <div class="menu">
+        <div class="card">
+            <h2>Cotización</h2>
+            <p>Genera y edita cotizaciones con conceptos y totales automaticos.</p>
+            <a href="Cotizacion/">Abrir Cotización</a>
+        </div>
+        <div class="card">
+            <h2>Recepción</h2>
+            <p>Registra recepcion de vehiculos con evidencia y firma.</p>
+            <a class="secondary" href="Recepcion/">Abrir Recepción</a>
+        </div>
+    </div>
+    <div class="footer"></div>
+</div>
+</body>
+</html>
